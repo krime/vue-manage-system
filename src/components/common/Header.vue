@@ -14,6 +14,7 @@
                     </el-tooltip>
                 </div>
                 <!-- 消息中心 -->
+                <!--
                 <div class="btn-bell">
                     <el-tooltip effect="dark" :content="message?`有${message}条未读消息`:`消息中心`" placement="bottom">
                         <router-link to="/tabs">
@@ -22,20 +23,15 @@
                     </el-tooltip>
                     <span class="btn-bell-badge" v-if="message"></span>
                 </div>
+                -->
                 <!-- 用户头像 -->
-                <div class="user-avator"><img src="static/img/img.jpg"></div>
+                <div class="user-avator"><img src="static/img/user.jpg"></div>
                 <!-- 用户名下拉菜单 -->
                 <el-dropdown class="user-name" trigger="click" @command="handleCommand">
                     <span class="el-dropdown-link">
                         {{username}} <i class="el-icon-caret-bottom"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                        <a href="http://blog.gdfengshuo.com/about/" target="_blank">
-                            <el-dropdown-item>关于作者</el-dropdown-item>
-                        </a>
-                        <a href="https://github.com/lin-xin/vue-manage-system" target="_blank">
-                            <el-dropdown-item>项目仓库</el-dropdown-item>
-                        </a>
                         <el-dropdown-item divided  command="loginout">退出登录</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
@@ -50,7 +46,7 @@
             return {
                 collapse: false,
                 fullscreen: false,
-                name: 'linxin',
+                name: 'admin',
                 message: 2
             }
         },
@@ -64,14 +60,26 @@
             // 用户名下拉菜单选择事件
             handleCommand(command) {
                 if(command == 'loginout'){
+                  this.$axios.defaults.headers.common['token'] = localStorage.getItem('token');
+                  this.$axios.post('/admin/api/tokens', {
+                    username: localStorage.getItem('ms_username')
+                  }).then((res) => {
                     localStorage.removeItem('ms_username')
+                    localStorage.removeItem('user_id')
+                    localStorage.removeItem('token')
                     this.$router.push('/login');
+                  }).catch(function(err) {
+                    localStorage.removeItem('ms_username')
+                    localStorage.removeItem('user_id')
+                    localStorage.removeItem('token')
+                    this.$router.push('/login');
+                  });
                 }
             },
             // 侧边栏折叠
             collapseChage(){
-                this.collapse = !this.collapse;
-                bus.$emit('collapse', this.collapse);
+              this.collapse = !this.collapse;
+              bus.$emit('collapse', this.collapse);
             },
             // 全屏事件
             handleFullScreen(){

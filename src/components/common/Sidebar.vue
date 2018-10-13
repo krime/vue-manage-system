@@ -39,6 +39,17 @@
                 collapse: false,
                 items: [
                     {
+                        icon: 'el-icon-lx-calendar',
+                        index: 'table',
+                        title: '数据报表'
+                    },
+                    {
+                        icon: 'el-icon-lx-upload',
+                        index: 'xlsx_upload',
+                        title: '数据导入',
+                    },
+                    /*
+                    {
                         icon: 'el-icon-lx-home',
                         index: 'dashboard',
                         title: '系统首页'
@@ -112,6 +123,7 @@
                             }
                         ]
                     }
+                    */
                 ]
             }
         },

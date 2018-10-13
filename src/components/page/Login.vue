@@ -16,7 +16,6 @@
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
                 </div>
-                <p class="login-tips">Tips : 用户名和密码随便填。</p>
             </el-form>
         </div>
     </div>
@@ -24,35 +23,62 @@
 
 <script>
     export default {
-        data: function(){
-            return {
-                ruleForm: {
-                    username: 'admin',
-                    password: '123123'
-                },
-                rules: {
-                    username: [
-                        { required: true, message: '请输入用户名', trigger: 'blur' }
-                    ],
-                    password: [
-                        { required: true, message: '请输入密码', trigger: 'blur' }
-                    ]
-                }
-            }
-        },
-        methods: {
-            submitForm(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        localStorage.setItem('ms_username',this.ruleForm.username);
-                        this.$router.push('/');
-                    } else {
-                        console.log('error submit!!');
-                        return false;
-                    }
-                });
-            }
+      data: function(){
+        return {
+          url: '/admin/api/tokens',
+          ruleForm: {
+            //username: 'postman',
+            //password: 'posting'
+            username: 'testman',
+            password: 'testing'
+          },
+          rules: {
+            username: [
+              { required: true, message: '请输入用户名', trigger: 'blur' }
+            ],
+            password: [
+              { required: true, message: '请输入密码', trigger: 'blur' }
+            ]
+          }
         }
+      },
+      methods: {
+        submitForm(formName) {
+          this.$refs[formName].validate((valid) => {
+            if (valid) {
+              this.$axios.defaults.headers.common['token'] = localStorage.getItem('token');
+              this.$axios.post(this.url, {
+                username: this.ruleForm.username,
+                password: this.ruleForm.password
+              }).then((res) => {
+                let result = res.data;
+                if (result.code==200) {
+                  let data = result.data;
+                  let ms_key = data.key || '';
+                  let ms_user_id = ms_key.split(/-/)[2] || '';
+                  localStorage.setItem('user_id', ms_user_id);
+                  localStorage.setItem('token', ms_user_id+'_'+data.token);
+                  localStorage.setItem('ms_username',this.ruleForm.username);
+                  this.$router.push('/');
+                } else {
+                  let desc = result.desc;
+                  this.$message({
+                    showClose: true,
+                    message: desc,
+                    center: true,
+                    type: 'error',
+                  });
+                }
+              }).catch((err) => {
+                console.log(err);
+              });
+            } else {
+              console.log('error submit!!');
+              return false;
+            }
+          });
+        }
+      }
     }
 </script>
 

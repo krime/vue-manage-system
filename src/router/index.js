@@ -7,7 +7,8 @@ export default new Router({
     routes: [
         {
             path: '/',
-            redirect: '/dashboard'
+            //redirect: '/dashboard',
+            redirect: '/table'
         },
         {
             path: '/',
@@ -27,7 +28,7 @@ export default new Router({
                 {
                     path: '/table',
                     component: resolve => require(['../components/page/BaseTable.vue'], resolve),
-                    meta: { title: '基础表格' }
+                    meta: { title: '数据报表' }
                 },
                 {
                     path: '/tabs',
@@ -50,6 +51,12 @@ export default new Router({
                     path: '/markdown',
                     component: resolve => require(['../components/page/Markdown.vue'], resolve),
                     meta: { title: 'markdown编辑器' }    
+                },
+                {
+                    // 文件上传组件
+                    path: '/xlsx_upload',
+                    component: resolve => require(['../components/page/XlsxUpload.vue'], resolve),
+                    meta: { title: '报表上传' }
                 },
                 {
                     // 图片上传组件
