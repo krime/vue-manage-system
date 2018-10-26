@@ -8,7 +8,7 @@ export default new Router({
         {
             path: '/',
             //redirect: '/dashboard',
-            redirect: '/table'
+            redirect: '/settle_data'
         },
         {
             path: '/',
@@ -16,9 +16,19 @@ export default new Router({
             meta: { title: '自述文件' },
             children:[
                 {
-                    path: '/dashboard',
-                    component: resolve => require(['../components/page/Dashboard.vue'], resolve),
-                    meta: { title: '系统首页' }
+                    path: '/settle_data',
+                    component: resolve => require(['../components/page/SettleData.vue'], resolve),
+                    meta: { title: '结算报表' }
+                },
+                {
+                    path: '/retailer',
+                    component: resolve => require(['../components/page/RetailerList.vue'], resolve),
+                    meta: { title: '销售商管理' }
+                },
+                {
+                    path: '/supplier',
+                    component: resolve => require(['../components/page/SupplierList.vue'], resolve),
+                    meta: { title: '供应商管理' }
                 },
                 {
                     path: '/icon',

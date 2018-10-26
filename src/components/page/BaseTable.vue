@@ -95,8 +95,7 @@
         name: 'basetable',
         data() {
             return {
-                //url: './static/vuetable.json',
-                url: '/admin/api/product_settle_log',
+                url: '/admin/web/product_settle_log',
                 tableData: [],
                 tableCount: 1000,
                 tablePage: 1,
@@ -229,13 +228,15 @@
               const config = {
                 responseType: 'blob'
               };
-              this.$axios.post('/admin/api/product_settle_log/export', {
+              this.$axios.post('/admin/file/product_settle_log/?export_model=settle_data', {
               }, config).then((res) => {
                 //console.log(res.data);
                 const content = res.data;
                 //const blob = new Blob([content], { type: 'application/vnd.ms-excel;charset=utf-8' });
                 const blob = new Blob([content], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8' });
-                const file = 'hello.xls';//res.headers['content-disposition']
+                let file = res.headers['content-disposition'];
+                file = file.match(/filename=(.*)$/)[1];
+                file = decodeURI(file);
                 if ("download" in document.createElement("a")) {
                   // 非IE下载
                   const elink = document.createElement("a");
